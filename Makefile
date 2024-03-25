@@ -30,7 +30,7 @@ DEBUGGER := gdb
 DEBUGGER_FLAGS := 
 
 # The name of the test input file
-TEST_INPUT := 
+TEST_INPUT := -p 8080 -d site -q 20
 # The name of the test output file
 TEST_OUTPUT := 
 # The name of the reference executable

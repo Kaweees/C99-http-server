@@ -9,8 +9,9 @@
 
 #include "server.h"
 
-#define USAGE_STRING \
-  "Usage: %s -d  <directory> -p <port>\n" /* Program usage string */
+#define USAGE_STRING                                                      \
+  "Usage: %s [-p port] [-d directory] [-q queue_size]\n" /* Program usage \
+                                                            string */
 #define SYSCALL_ERROR -1
 
 /**
@@ -33,22 +34,19 @@ int main(int argc, char* argv[]) {
   char* working_directory = DEFAULT_WORKING_DIRECTORY;
   int port = DEFAULT_PORT;
   int queue_size = DEFAULT_QUEUE_SIZE;
-  if (argc >= 2) {
-    working_directory = argv[2];
-  }
 
   /* Parse the command line arguments */
-  while ((opt = getopt(argc, argv, "d:p:q:")) != OUT_OF_OPTIONS) {
+  while ((opt = getopt(argc, argv, "p:d:q:")) != OUT_OF_OPTIONS) {
     switch (opt) {
-      case WORKING_DIRECTORY:
-        working_directory = optarg;
-        break;
       case PORT_NUMBER:
         port = strtol(optarg, NULL, 10);
         if (!(MIN_ALLOWED_PORT <= port && port <= MAX_ALLOWED_PORT)) {
           fprintf(stderr, "Invalid port number: %s\n", optarg);
           usage(argv[0]);
         }
+        break;
+      case WORKING_DIRECTORY:
+        working_directory = optarg;
         break;
       case QUEUE_SIZE:
         queue_size = strtol(optarg, NULL, 10);
