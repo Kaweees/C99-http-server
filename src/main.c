@@ -12,6 +12,7 @@
 #define USAGE_STRING \
   "Usage: %s -d  <directory> -p <port>\n" /* Program usage string */
 #define SYSCALL_ERROR -1
+
 /**
  * Prints the proper usage of the program and exits unsuccessfully.
  */

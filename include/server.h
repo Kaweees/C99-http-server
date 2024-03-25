@@ -14,6 +14,8 @@
   1024 /* Ports below 1024 are reserved for privileged applications */
 #define MAX_ALLOWED_PORT 49151 /* Ports above 49151 are ephemeral ports */
 #define MIN_QUEUE_SIZE   1     /* The minimum queue size */
+#define CRLF \
+  "\r\n" /* Carriage return and line feed, end of line marker used by HTTP*/
 
 /* Begin typedef declarations */
 
@@ -29,6 +31,8 @@ typedef enum ServerOptions {
 
 /* Create a network service */
 int create_service(short port, int queue_size);
-int accept_connection(int fd);
+int accept_connection(int sock_fd);
+void handle_request(int new_sock_fd);
+void run_service(int sock_fd);
 
 #endif /* SERVER_H */
