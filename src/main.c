@@ -30,7 +30,7 @@ void usage(char* prog_name) {
  */
 int main(int argc, char* argv[]) {
   enum ServerOptions opt;
-  char* working_directory = ".";
+  char* working_directory = DEFAULT_WORKING_DIRECTORY;
   int port = DEFAULT_PORT;
   int queue_size = DEFAULT_QUEUE_SIZE;
   if (argc >= 2) {
@@ -69,6 +69,8 @@ int main(int argc, char* argv[]) {
   if (chdir(working_directory) == SYSCALL_ERROR) {
     perror("Error changing directory");
     exit(EXIT_FAILURE);
+  } else {
+    printf("Changed working directory to: %s\n", working_directory);
   }
 
   /* Create the server */

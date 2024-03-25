@@ -8,8 +8,9 @@
     abort();                                                                  \
   } while (0)
 
-#define DEFAULT_PORT       6969 /* The default server port number */
-#define DEFAULT_QUEUE_SIZE 5    /* The default queue size */
+#define DEFAULT_WORKING_DIRECTORY "site"  /* The default working directory */
+#define DEFAULT_PORT              6969 /* The default server port number */
+#define DEFAULT_QUEUE_SIZE        5    /* The default queue size */
 #define MIN_ALLOWED_PORT \
   1024 /* Ports below 1024 are reserved for privileged applications */
 #define MAX_ALLOWED_PORT 49151 /* Ports above 49151 are ephemeral ports */
@@ -26,6 +27,11 @@ typedef enum ServerOptions {
   QUEUE_SIZE = 'q',        /* The queue size */
   OUT_OF_OPTIONS = -1,     /* The end of the options */
 } ServerOptions;
+
+typedef enum HttpMethod {
+  GET /* The GET HTTP method */,
+  POST /* The POST HTTP method */,
+} HttpMethod;
 
 /* Begin function prototype declarations */
 
