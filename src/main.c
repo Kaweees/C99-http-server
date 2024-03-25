@@ -11,10 +11,7 @@
 
 #define USAGE_STRING \
   "Usage: %s -d  <directory> -p <port>\n" /* Program usage string */
-#define MIN_ALLOWED_PORT \
-  1024 /* Ports below 1024 are reserved for privileged applications */
-#define MAX_ALLOWED_PORT 49151 /* Ports above 49151 are ephemeral ports */
-
+#define SYSCALL_ERROR -1
 /**
  * Prints the proper usage of the program and exits unsuccessfully.
  */
@@ -33,12 +30,14 @@ void usage(char* prog_name) {
 int main(int argc, char* argv[]) {
   enum ServerOptions opt;
   char* working_directory = ".";
-  uint16_t port = PORT;
+  int port = DEFAULT_PORT;
+  int queue_size = DEFAULT_QUEUE_SIZE;
   if (argc >= 2) {
     working_directory = argv[2];
   }
 
-  while ((opt = getopt(argc, argv, "d:p:")) != OUT_OF_OPTIONS) {
+  /* Parse the command line arguments */
+  while ((opt = getopt(argc, argv, "d:p:q:")) != OUT_OF_OPTIONS) {
     switch (opt) {
       case WORKING_DIRECTORY:
         working_directory = optarg;
@@ -50,9 +49,32 @@ int main(int argc, char* argv[]) {
           usage(argv[0]);
         }
         break;
+      case QUEUE_SIZE:
+        queue_size = strtol(optarg, NULL, 10);
+        if (!(MIN_QUEUE_SIZE <= queue_size)) {
+          fprintf(stderr, "Invalid queue size: %s\n", optarg);
+          usage(argv[0]);
+        }
+        break;
       default:
         usage(argv[0]);
     }
   }
+
+  /* Set stdout to be unbuffered so that logs are printed immediately */
+  setbuf(stdout, NULL);
+
+  /* Change the working directory */
+  if (chdir(working_directory) == SYSCALL_ERROR) {
+    perror("Error changing directory");
+    exit(EXIT_FAILURE);
+  }
+
+  /* Create the server */
+  int fd = create_service(port, queue_size);
+  /* Run the server */
+  run_service(fd);
+  /* Close the server */
+  close(fd);
   return EXIT_SUCCESS;
 }
