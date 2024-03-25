@@ -8,7 +8,12 @@
     abort();                                                                  \
   } while (0)
 
-#define PORT 6969 /* The server port number */
+#define DEFAULT_PORT       6969 /* The default server port number */
+#define DEFAULT_QUEUE_SIZE 5    /* The default queue size */
+#define MIN_ALLOWED_PORT \
+  1024 /* Ports below 1024 are reserved for privileged applications */
+#define MAX_ALLOWED_PORT 49151 /* Ports above 49151 are ephemeral ports */
+#define MIN_QUEUE_SIZE   1     /* The minimum queue size */
 
 /* Begin typedef declarations */
 
@@ -16,9 +21,14 @@
 typedef enum ServerOptions {
   WORKING_DIRECTORY = 'd', /* The working directory */
   PORT_NUMBER = 'p',       /* The port number */
-  OUT_OF_OPTIONS = -1,    /* The end of the options */
+  QUEUE_SIZE = 'q',        /* The queue size */
+  OUT_OF_OPTIONS = -1,     /* The end of the options */
 } ServerOptions;
 
 /* Begin function prototype declarations */
+
+/* Create a network service */
+int create_service(short port, int queue_size);
+int accept_connection(int fd);
 
 #endif /* SERVER_H */

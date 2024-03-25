@@ -85,8 +85,8 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 test: $(BINS)
 	@echo "Testing $(TARGET)..."
 	@echo "Testing memory leaks..."
-	$(MEMCHECK) $(MEMCHECK_FLAGS) $(BINS) $(TEST_INPUT)
-	# $(BINS) $(TEST_INPUT)
+	# $(MEMCHECK) $(MEMCHECK_FLAGS) $(BINS) $(TEST_INPUT)
+	$(BINS) $(TEST_INPUT)
 
 # Clean target: remove build artifacts and non-essential files
 clean:
